@@ -29,7 +29,8 @@ endif()
 
 
 set(HEADERS
-    smooth_per_vertex_normals.h)
+    smooth_per_vertex_normals.h
+    utils.h)
 
 set(SOURCES
     smooth_per_vertex_normals.cpp)
