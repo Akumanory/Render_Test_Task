@@ -33,7 +33,8 @@ set(HEADERS
     utils.h)
 
 set(SOURCES
-    smooth_per_vertex_normals.cpp)
+    smooth_per_vertex_normals.cpp
+    utils.cpp)
 
 add_library(${PROJECT_NAME}-lib STATIC
                ${HEADERS}

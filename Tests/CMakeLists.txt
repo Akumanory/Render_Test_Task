@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13)
 
 project(BinaryRepresentation VERSION 1.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
 add_compile_options(
     -Werror
@@ -16,7 +16,7 @@ add_compile_options(
     -Wenum-compare
     -Wfloat-equal
     -Wnon-virtual-dtor
-    -Wold-style-cast
+    # -Wold-style-cast
     -Woverloaded-virtual
     -Wredundant-decls
     -Wsign-conversion

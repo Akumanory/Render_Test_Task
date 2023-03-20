@@ -1,25 +1,111 @@
-#include <SmoothPerVertexNormals/utils.h>
+// #include <SmoothPerVertexNormals/utils.h>
+#include <SmoothPerVertexNormals/smooth_per_vertex_normals.h>
 
+#include <cstdio>
+#include <vector>
 #include <iostream>
 
-using namespace utils;
+struct scenario_values
+{
+    // name
+    std::string scenarion_name;
+    // test values
+    std::vector<vec3> verts_vec;
+    std::vector<int> faces_vec;
+
+    // etalon normals
+    std::vector<vec3> normals_vec_etalon;
+};
+
+// Test Data
+std::vector<scenario_values> test_scenarious = {
+    //scenraio_1
+    {
+        //name
+        "scenario_1 - pyramid",
+        // verts vec
+        {
+            {0,0,0},
+            {0,0,1},
+            {1,0,0},
+            {0,1,0}
+        },
+        // faces vec
+        {
+            0,2,1,
+            0,3,2,
+            0,1,3,
+            1,2,3
+        },
+        // etalon normals
+        {
+            {-0.577, -0.577, -0.577},
+            {0,0,1},
+            {1,0,0},
+            {0,1,0}
+        }
+
+    },
+    //scenraio_2
+    {
+        //name
+        "scenario_2 - 2 perpendicula triangles",
+        // verts vec
+        {
+            {0,0,0},
+            {0,0,1},
+            {1,0,0},
+            {0,1,0}
+        },
+        // faces vec
+        {
+            0,3,2,
+            0,1,3,
+        },
+        // etalon normals
+        {
+            {-0.707, 0, -0.707},
+            {-1,0,0},
+            {0,0,-1},
+            {-0.707, 0, -0.707}
+        }
+
+    },
+};
+
+
+bool normals_test(const scenario_values& data)
+{
+    std::vector<vec3> out_normals_vec;
+    out_normals_vec.resize(data.verts_vec.size());
+
+    smooth_per_vertex_normals::calc_mesh_normals(
+        out_normals_vec.data(),
+        data.verts_vec.data(),
+        data.faces_vec.data(),
+        static_cast<int>(data.verts_vec.size()),
+        static_cast<int>(data.faces_vec.size())
+    );
+
+    for (size_t i = 0; i < data.normals_vec_etalon.size(); i++)
+    {
+        if (data.normals_vec_etalon != out_normals_vec)
+            return false;
+    }
+
+    return true;
+}
 
 int main()
 {
-    vec3 first(10.0, 12.0, 0.0);
-    vec3 second(0.0, 0.0,  13.4);
-
-    vec3 etalon(10.0, 12.0, 13.4);
-
-    vec3 third = first + second;
-
-    std::cout << "Third vector magnitude -> " << third.magnitude() << std::endl;
-
-    if(third == etalon)
+    for (const auto& scenario : test_scenarious)
     {
-        std::cout << "PASSED" << std::endl;
+        std::cout << "Test " << scenario.scenarion_name << " ";
+        if (normals_test(scenario))
+            std::cout << "PASSED" << std::endl;
+        else
+            std::cout << "FILED" << std::endl;
     }
-
 
     return 0;
 }

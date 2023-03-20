@@ -9,12 +9,7 @@ namespace utils
     // --- Methods ---
     // ---------------
 
-    bool is_equal(double lhs, double rhs, double epsilon = 0.01)
-    {
-        if (std::fabs(lhs - rhs) < epsilon)
-            return true;
-        return false;
-    }
+    bool is_equal(double lhs, double rhs, double epsilon = 0.01);
 
     // ---------------
     // --- Structs ---
@@ -48,6 +43,11 @@ namespace utils
             return vec3(x - obj.x, y - obj.y, z - obj.z);
         }
 
+        vec3 operator/ (double value)
+        {
+            return vec3(x / value, y / value, z / value);
+        }
+
         bool operator== (vec3 const &obj) const
         {
             if (!is_equal(x, obj.x))
@@ -70,6 +70,15 @@ namespace utils
         // ---------------
         // --- Methods ---
         // ---------------
+
+        static vec3 cross_product(const vec3& lhs, const vec3& rhs)
+        {
+            double x = lhs.y * rhs.z - lhs.z * rhs.y;
+            double y = -(lhs.x * rhs.z - lhs.z * rhs.x);
+            double z = lhs.x * rhs.y - lhs.y * rhs.x;
+
+            return vec3(x, y, z);
+        }
 
         double magnitude() const
         {

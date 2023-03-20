@@ -6,7 +6,7 @@ using namespace utils;
 
 namespace smooth_per_vertex_normals
 {
-    // C a l c u l a t e s m o o t h ( a v e r a g e ) p e r - ve rtex norm als
+    // Calculate smooth (average) per - vertex normals
     //
     // [out] normals - output per - vertex normals
     // [in]  verts   - input per - vertex positions

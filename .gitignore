@@ -34,3 +34,6 @@
 #VsCode
 /build
 /.vscode
+
+#clangd
+/.cache
