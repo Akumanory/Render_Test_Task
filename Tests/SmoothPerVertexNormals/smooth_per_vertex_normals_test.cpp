@@ -2,6 +2,7 @@
 #include <SmoothPerVertexNormals/smooth_per_vertex_normals.h>
 
 #include <cstdio>
+#include <string>
 #include <vector>
 #include <iostream>
 

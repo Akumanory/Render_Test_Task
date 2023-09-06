@@ -37,3 +37,5 @@ set(SOURCES
 add_library(${PROJECT_NAME}-lib STATIC
                ${HEADERS}
                ${SOURCES})
+
+target_link_libraries(${PROJECT_NAME}-lib Utils-lib)

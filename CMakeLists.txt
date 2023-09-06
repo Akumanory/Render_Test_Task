@@ -6,5 +6,6 @@ include_directories(".")
 add_subdirectory("BinaryRepresentation")
 add_subdirectory("LinkedListParser")
 add_subdirectory("SmoothPerVertexNormals")
+add_subdirectory("Utils")
 
 add_subdirectory("Tests")

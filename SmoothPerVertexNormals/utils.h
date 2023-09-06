@@ -15,6 +15,7 @@ namespace utils
     // --- Structs ---
     // ---------------
 
+    // vector - 3 dimesnison [double]
     struct vec3
     {
         vec3() = default;
@@ -71,6 +72,7 @@ namespace utils
         // --- Methods ---
         // ---------------
 
+        // cross_product of two 3 dimensional vectors
         static vec3 cross_product(const vec3& lhs, const vec3& rhs)
         {
             double x = lhs.y * rhs.z - lhs.z * rhs.y;
@@ -80,6 +82,7 @@ namespace utils
             return vec3(x, y, z);
         }
 
+        // magnitude of 3 dimesional vector
         double magnitude() const
         {
             return std::sqrt(

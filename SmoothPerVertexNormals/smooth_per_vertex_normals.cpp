@@ -1,5 +1,8 @@
 #include "smooth_per_vertex_normals.h"
 #include <stdexcept>
+#include <string>
+
+#include "Utils/defines.h"
 
 namespace smooth_per_vertex_normals
 {
@@ -11,7 +14,7 @@ namespace smooth_per_vertex_normals
         int nfaces)
     {
         if (nfaces % 3 != 0)
-            std::runtime_error("nfaces is not a multiple of three");
+            throw std::runtime_error(FUNC_NAME + " --> Nfaces is not a multiple of three");
 
         for (auto i = 0; i < nverts; i++)
             normals[i] = vec3();
