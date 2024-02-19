@@ -1,17 +1,15 @@
 #include "utils.h"
 
-namespace utils
-{
+namespace utils {
 
-    // ---------------
-    // --- Methods ---
-    // ---------------
+// ---------------
+// --- Methods ---
+// ---------------
 
-    bool is_equal(double lhs, double rhs, double epsilon)
-    {
-        if (std::fabs(lhs - rhs) < epsilon)
-            return true;
-        return false;
-    }
-
+bool is_equal(double lhs, double rhs, double epsilon) {
+    if (std::fabs(lhs - rhs) < epsilon)
+        return true;
+    return false;
 }
+
+}  // namespace utils

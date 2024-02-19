@@ -1,11 +1,10 @@
 #pragma once
 
-#include "utils.h"
+#include "SmoothPerVertexNormals/utils.h"
 
-using namespace utils;
+using utils::vec3;
 
-namespace smooth_per_vertex_normals
-{
+namespace smooth_per_vertex_normals {
     /// Calculate smooth (average) per - vertex normals
     ///
     /// Params:
@@ -22,4 +21,4 @@ namespace smooth_per_vertex_normals
         int nverts,
         int nfaces);
 
-} // namespace smooth_per_vertex_normals
+}  // namespace smooth_per_vertex_normals

@@ -5,29 +5,28 @@
 #include <string>
 #include <unordered_map>
 
-// TODO: only for debug and develop reasons, remove after
+// TODO(akumanory): only for debug and develop reasons, remove after
 #include <tuple>
 #include <utility>
 //
 
 #include "Utils/defines.h"
 
-namespace linked_list_parser
-{
+namespace linked_list_parser {
 
-void List::Serialize(FILE *file)
-{
+void List::Serialize(FILE *file) {
     if (file == nullptr)
         throw std::runtime_error(FUNC_NAME + "File is nullptr, can't write to it");
 
     if (count < 0)
         throw std::runtime_error(FUNC_NAME + " --> Count of nodes is 0, can't not serialize anything");
 
+    // NOTE(akumanory): this node needed for rand idx
+    // this help to serialize in one go
     std::unordered_map<ListNode*, int> idx_to_node_map;
 
     int node_idx = 0;
-    for (ListNode* it = head; it != nullptr; it = it->next)
-    {
+    for (ListNode* it = head; it != nullptr; it = it->next) {
         idx_to_node_map.insert(std::make_pair(it, node_idx));
         node_idx++;
     }
@@ -35,35 +34,38 @@ void List::Serialize(FILE *file)
     if (idx_to_node_map.size() != static_cast<size_t>(count))
         throw std::runtime_error(FUNC_NAME + "Number of nodes doesn't equal to count variable");
 
+    // TODO(akumanory): dont't need counts if we going to use structs (wrong we
+    // need to count string size because instead of chars we write pointer)
+
     // Write count to first line
     if (fwrite(&count, sizeof(count), 1, file) != 1)
         throw std::runtime_error(FUNC_NAME + " --> Error writing count value to file");
 
-    for (ListNode* it = head; it != nullptr; it = it->next)
-    {
+    for (ListNode* it = head; it != nullptr; it = it->next) {
+        #pragma region rand_idx_write
         // serch corresponding idx for rand pointer
         int rand_idx = -1;
         if (auto search = idx_to_node_map.find(it); search != idx_to_node_map.end())
             rand_idx = search->second;
-
         // Write rand poitner idx
         if (fwrite(&rand_idx, sizeof(rand_idx), 1, file) != 1)
             throw std::runtime_error(FUNC_NAME + " --> Error writing rand idx value to file");
+        #pragma endregion rand_idx_write
+
         // Write data size
         size_t data_size = it->data.size();
         if (fwrite(&data_size, sizeof(data_size), 1, file) != 1)
             throw std::runtime_error(FUNC_NAME + " --> Error writing data size to file");
+
         // Write data
-        if (fwrite(&it->data, sizeof(it->data), 1, file) != 1)
+        if (fwrite(&it->data, sizeof(char), data_size, file) != 1)
             throw std::runtime_error(FUNC_NAME + " --> Error writing data value to file");
     }
 }
 
-void List::Deserialize(FILE *file)
-{
+void List::Deserialize(FILE *file) {
     if (file == nullptr)
         throw std::runtime_error(FUNC_NAME + " --> File is nullptr, can't read from it");
-
 
     count = -1;
 
@@ -74,8 +76,7 @@ void List::Deserialize(FILE *file)
         return;
 
     // remove old data
-    while (head != tail)
-    {
+    while (head != tail) {
         ListNode* temp = head;
         head = head->next;
         delete temp;
@@ -91,24 +92,16 @@ void List::Deserialize(FILE *file)
     // idx of node and idx of node pointed to by rand
     std::unordered_map<int, int>  idx_to_rand_idx_map;
 
-    for (int i = 0; i < count; i++)
-    {
-        if (!tail->data.empty())
-        {
+    for (int i = 0; i < count; i++) {
+        if (!tail->data.empty()) {
             ListNode* temp = tail;
             tail = new ListNode();
             temp->next = tail;
             tail->prev = temp;
         }
 
-
-
-
         // if (fread(&count, sizeof(count), 1, file))
         //     throw std::runtime_error(FUNC_NAME + "Error can't read count value from file");
-
     }
-
 }
-
-} // linked_list_parser
+}  // namespace linked_list_parser

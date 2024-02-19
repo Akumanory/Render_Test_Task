@@ -37,4 +37,7 @@
 
 #clangd
 /.cache
+.clangd
 
+# cmake 
+compile_commands.json
