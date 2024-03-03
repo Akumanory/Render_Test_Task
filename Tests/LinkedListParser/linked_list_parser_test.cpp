@@ -22,7 +22,7 @@
 struct test_struct {
     test_struct()
     {};
-    test_struct(int _a, double _b, std::string _data)
+    test_struct(int _a, double _b, const char* _data)
         : a(_a)
         , b(_b)
         , data(_data)
@@ -30,11 +30,12 @@ struct test_struct {
 
     int a = 0;
     double b = 0.0;
-    std::string data = {};
+    const char* data;
 };
 
 // TODO(akumanory): test for binary representation
 // You can only pass the signed integer
+// ============= 
 template<typename T,
     std::enable_if_t<
         std::is_signed<T>::value &&
@@ -43,10 +44,46 @@ template<typename T,
 void test(T test_var) {
     std::cout << test_var << std::endl;
 }
+// =============
 
-#define TEST 1
+#define TEST 0
+#define TEST_2 0
+#define SERIALIZE 1
+#define DESERIALIZE 1
 
-int main() {
+
+void test_serialization();
+void test_deserialization();
+
+
+int main() 
+{
+#if TEST_2
+    // Writing to file 
+    // FILE* test_write = fopen("../../../Tests/LinkedListParser/test_data/serialized_data.bin", "wb");
+    FILE* test_write = fopen("test_data/serialized_data.bin", "wb");
+    std::string write_str = "This is test string here";
+    size_t write_len = write_str.size(); 
+
+    fwrite(&write_len, sizeof(write_len), 1, test_write);
+    fwrite(&write_str[0], sizeof(char), write_len, test_write);
+    fclose(test_write);
+
+    // Reading from file
+    // FILE* test_read = fopen("../../../Tests/LinkedListParser/test_data/serialized_data.bin", "rb");
+    FILE* test_read = fopen("test_data/serialized_data.bin", "rb");
+    std::string read_str = {};
+    size_t read_len = 0;
+
+    fread(&read_len, sizeof(read_len), 1, test_read);
+    read_str.resize(read_len);
+    fread(&read_str[0], sizeof(char), read_len, test_read);
+    fclose(test_read);
+
+    std::cout << "read str: " << read_str << std::endl;
+
+#endif // TEST_2
+
 #if TEST
     /////////////////// begin -> Struct serialization test
     {
@@ -87,16 +124,32 @@ int main() {
     /////////////////// end -> Struct serialization test
 #endif // TEST
 
+
+    try {
+
+#if SERIALIZE
+        test_serialization();
+#endif // SERIALIZE
+
+#if DESERIALIZE
+        test_deserialization();
+#endif // DESERIALIZE
+
+    } catch (const std::exception& e) {
+        std::cout << e.what() << std::endl;
+    }
+
+    return 0;
+}
+
+void test_serialization() {
     linked_list_parser::List test_list{};
-    // FILE* serialization_file  = fopen("test_data/serialized_data.bin", "wb");
-    FILE* deserilization_file = fopen("test_data/serialized_data.bin", "rb");
+    // FILE* serialization_file = fopen("../../../Tests/LinkedListParser/test_data/serialized_data.bin", "wb");
+    FILE* serialization_file  = fopen("test_data/serialized_data.bin", "wb");
 
-    // if (serialization_file == nullptr)
-    //     throw std::runtime_error("fopen --> can't open file");
-
-    if (deserilization_file == nullptr)
+    if (serialization_file == nullptr)
         throw std::runtime_error("fopen --> can't open file");
-
+    
     linked_list_parser::ListNode test_list_node;
     test_list_node.prev = nullptr;
     test_list_node.next = nullptr;
@@ -107,10 +160,18 @@ int main() {
     test_list.tail = &test_list_node;
     test_list.count = 1;
 
-    // serialization_file = nullptr;
+    test_list.Serialize(serialization_file);
 
-    // test_list.Serialize(serialization_file);
+    std::cout << "Great, serialization complete" << std::endl;
+}
+
+void test_deserialization() {
+    linked_list_parser::List test_list{};
+    FILE* deserilization_file = fopen("test_data/serialized_data.bin", "rb");
+
+    if (deserilization_file == nullptr)
+        throw std::runtime_error("fopen --> can't open file");
+
     test_list.Deserialize(deserilization_file);
-
-    return 0;
+    std::cout << "Great, deserialization complete" << std::endl;
 }
