@@ -153,12 +153,22 @@ void test_serialization() {
     linked_list_parser::ListNode test_list_node;
     test_list_node.prev = nullptr;
     test_list_node.next = nullptr;
-    test_list_node.rand = &test_list_node;
+    test_list_node.rand = nullptr;
     test_list_node.data = "test_list_node";
 
+    linked_list_parser::ListNode test_list_node_2;
+    test_list_node_2.prev = &test_list_node_2;
+    test_list_node_2.next = nullptr;
+    test_list_node_2.rand = &test_list_node;
+    test_list_node_2.data = "test_list_node_2";
+    
+    // Update for first list node
+    test_list_node.next = &test_list_node_2;
+
+
     test_list.head = &test_list_node;
-    test_list.tail = &test_list_node;
-    test_list.count = 1;
+    test_list.tail = &test_list_node_2;
+    test_list.count = 2;
 
     test_list.Serialize(serialization_file);
 

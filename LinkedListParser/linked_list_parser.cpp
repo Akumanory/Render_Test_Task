@@ -50,7 +50,7 @@ void List::Serialize(FILE *file) {
 // #pragma region rand_idx_write
         // serch corresponding idx for rand pointer
         int rand_idx = -1;
-        if (auto search = idx_to_node_map.find(it); search != idx_to_node_map.end())
+        if (auto search = idx_to_node_map.find(it->rand); search != idx_to_node_map.end())
             rand_idx = search->second;
         // Write rand poitner idx
         fwrite_ret = fwrite(&rand_idx, sizeof(rand_idx), 1, file);
